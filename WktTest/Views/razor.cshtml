@@ -1,0 +1,37 @@
+﻿@using WktTest
+@model DataTest
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice for @Model.index</h1>
+    <p>Date: @Model.data</p>
+
+   
+</body>
+</html>
