@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Etiquetage.Service; 
 
 namespace WktTest
 {
@@ -21,26 +22,16 @@ namespace WktTest
 			{
 				byte[] pdfBytes = await _wktService.generatePdfPage();
 
-				using (SaveFileDialog saveDialog = new SaveFileDialog())
+				string tempFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.pdf");
+				await File.WriteAllBytesAsync(tempFile, pdfBytes);
+
+				await Task.Run(() =>
 				{
-					saveDialog.Title = "اختر مكان حفظ ملف PDF";
-					saveDialog.Filter = "ملف PDF (*.pdf)|*.pdf";
-					saveDialog.FileName = "Report.pdf"; 
+					PdfPrinter.PrintPdf(tempFile, "name printer");
+				});
 
-					if (saveDialog.ShowDialog() == DialogResult.OK)
-					{
-						string filePath = saveDialog.FileName;
+				try { File.Delete(tempFile); } catch { }
 
-						await File.WriteAllBytesAsync(filePath, pdfBytes);
-
-						System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-						{
-							FileName = filePath,
-							UseShellExecute = true
-						});
-
-					}
-				}
 			}
 			catch (Exception ex)
 			{
